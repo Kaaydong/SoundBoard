@@ -50,6 +50,8 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         ButtonG = findViewById(R.id.button_main_g);
         ButtonGsh = findViewById(R.id.button_main_Gsh);
         ButtonchangeOctave = findViewById(R.id.button_main_changeOctave);
+        buttonScale1 = findViewById(R.id.button_main_scale1);
+        buttonScale2 = findViewById(R.id.button_main_scale2);
 
 
     }

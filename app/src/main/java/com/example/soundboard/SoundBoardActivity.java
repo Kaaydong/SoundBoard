@@ -9,17 +9,20 @@ import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 import android.view.View;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SoundBoardActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    private Button buttonA, ButtonB, ButtonBfl, ButtonC, ButtonCsh, ButtonD, ButtonDsh, ButtonE, ButtonF, ButtonFSh, ButtonG, ButtonGsh, ButtonchangeOctave;
+    private Button ButtonA, ButtonB, ButtonBfl, ButtonC, ButtonCsh, ButtonD, ButtonDsh, ButtonE, ButtonF, ButtonFSh, ButtonG, ButtonGsh, ButtonchangeOctave;
     private Button buttonScale1, buttonScale2;
-    private boolean octave;
+    public boolean octave;
     private SoundPool soundPool;
     private int soundID;
     boolean loaded = false;
     private int[] sounds1,sounds2;
-
+    private Map<Integer, Integer> noteMap,noteMap2;
 
 
     @Override
@@ -28,8 +31,9 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_sound_board);
         wireWidgets();
         setListeners();
-        createSounds();
         createSoundList();
+        createSounds();
+
 
         // Set the hardware buttons to control the music
 
@@ -37,7 +41,7 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         }
     public void wireWidgets()
     {
-        buttonA = findViewById(R.id.button_main_a);
+        ButtonA = findViewById(R.id.button_main_a);
         ButtonB = findViewById(R.id.button_main_B);
         ButtonBfl = findViewById(R.id.button_main_Bfl);
         ButtonC = findViewById(R.id.button_main_C);
@@ -66,19 +70,21 @@ public void setListeners()
         }
     });
 
-    buttonA.setOnClickListener(this);
-    ButtonB.setOnClickListener(this);
-    ButtonBfl.setOnClickListener(this);
-    ButtonC.setOnClickListener(this);
-    ButtonCsh.setOnClickListener(this);
-    ButtonD.setOnClickListener(this);
-    ButtonDsh.setOnClickListener(this);
-    ButtonE.setOnClickListener(this);
-    ButtonF.setOnClickListener(this);
-    ButtonFSh.setOnClickListener(this);
-    ButtonG.setOnClickListener(this);
-    ButtonGsh.setOnClickListener(this);
-
+    KeyBoardListener keyBoardLister = new KeyBoardListener();
+    ButtonA.setOnClickListener(keyBoardLister);
+    ButtonB.setOnClickListener(keyBoardLister);
+    ButtonBfl.setOnClickListener(keyBoardLister);
+    ButtonC.setOnClickListener(keyBoardLister);
+    ButtonCsh.setOnClickListener(keyBoardLister);
+    ButtonD.setOnClickListener(keyBoardLister);
+    ButtonDsh.setOnClickListener(keyBoardLister);
+    ButtonE.setOnClickListener(keyBoardLister);
+    ButtonF.setOnClickListener(keyBoardLister);
+    ButtonFSh.setOnClickListener(keyBoardLister);
+    ButtonG.setOnClickListener(keyBoardLister);
+    ButtonGsh.setOnClickListener(keyBoardLister);
+    buttonScale1.setOnClickListener(keyBoardLister);
+    buttonScale2.setOnClickListener(keyBoardLister);
 }
 
 private void delay(int millisDelay)
@@ -91,6 +97,39 @@ private void delay(int millisDelay)
 }
 
     public void createSounds() {
+
+
+        noteMap = new HashMap<>();
+        noteMap.put(ButtonA.getId(),sounds1[0]);
+        noteMap.put(ButtonB.getId(),sounds1[1]);
+        noteMap.put(ButtonBfl.getId(),sounds1[2]);
+        noteMap.put(ButtonC.getId(),sounds1[3]);
+        noteMap.put(ButtonCsh.getId(),sounds1[4]);
+        noteMap.put(ButtonD.getId(),sounds1[5]);
+        noteMap.put(ButtonDsh.getId(),sounds1[6]);
+        noteMap.put(ButtonE.getId(),sounds1[7]);
+        noteMap.put(ButtonF.getId(),sounds1[8]);
+        noteMap.put(ButtonFSh.getId(),sounds1[9]);
+        noteMap.put(ButtonG.getId(),sounds1[10]);
+        noteMap.put(ButtonGsh.getId(),sounds1[11]);
+        noteMap2 = new HashMap<>();
+        noteMap2.put(ButtonA.getId(),sounds2[0]);
+        noteMap2.put(ButtonB.getId(),sounds2[1]);
+        noteMap2.put(ButtonBfl.getId(),sounds2[2]);
+        noteMap2.put(ButtonC.getId(),sounds2[3]);
+        noteMap2.put(ButtonCsh.getId(),sounds2[4]);
+        noteMap2.put(ButtonD.getId(),sounds2[5]);
+        noteMap2.put(ButtonDsh.getId(),sounds2[6]);
+        noteMap2.put(ButtonE.getId(),sounds2[7]);
+        noteMap2.put(ButtonF.getId(),sounds2[8]);
+        noteMap2.put(ButtonFSh.getId(),sounds2[9]);
+        noteMap2.put(ButtonG.getId(),sounds2[10]);
+        noteMap2.put(ButtonGsh.getId(),sounds2[11]);
+
+    }
+
+    public void createSoundList()
+    {
         this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
         // Load the sound
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
@@ -101,10 +140,6 @@ private void delay(int millisDelay)
                 loaded = true;
             }
         });
-    }
-
-    public void createSoundList()
-    {
         sounds1 = new int[12];
         sounds1[0] = soundPool.load(this, R.raw.scalea, 1);
         sounds1[1] = soundPool.load(this, R.raw.scaleb, 1);
@@ -134,112 +169,27 @@ private void delay(int millisDelay)
     }
     @Override
     public void onClick(View view) {
-        if (!octave) {
-        switch (view.getId()) {
+    }
+    private class KeyBoardListener implements View.OnClickListener
+    {
 
-                case R.id.button_main_a: {
-                    soundPool.play(sounds1[0], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_B: {
-                    soundPool.play(sounds1[1], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_Bfl: {
-                    soundPool.play(sounds1[2], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_C: {
-                    soundPool.play(sounds1[3], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_Csh: {
-                    soundPool.play(sounds1[4], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_D: {
-                    soundPool.play(sounds1[5], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_Dsh: {
-                    soundPool.play(sounds1[6], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_e: {
-                    soundPool.play(sounds1[7], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_F: {
-                    soundPool.play(sounds1[8], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_Fsh: {
-                    soundPool.play(sounds1[9], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_g: {
-                    soundPool.play(sounds1[10], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_Gsh: {
-                    soundPool.play(sounds1[11], 1, 1, 1, 0, 1f);
-                    break;
+        @Override
+        public void onClick(View view) {
+
+
+            if(!octave) {
+                int songId = noteMap.get(view.getId());
+                if (songId != 0) {
+                    soundPool.play(songId, 1, 1, 1, 0, 1f);
                 }
             }
-        }
-        else
-        {
-            switch (view.getId()) {
-
-                case R.id.button_main_a: {
-                    soundPool.play(sounds2[0], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_B: {
-                    soundPool.play(sounds2[1], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_Bfl: {
-                    soundPool.play(sounds2[2], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_C: {
-                    soundPool.play(sounds2[3], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_Csh: {
-                    soundPool.play(sounds2[4], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_D: {
-                    soundPool.play(sounds2[5], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_Dsh: {
-                    soundPool.play(sounds2[6], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_e: {
-                    soundPool.play(sounds2[7], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_F: {
-                    soundPool.play(sounds2[8], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_Fsh: {
-                    soundPool.play(sounds2[9], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_g: {
-                    soundPool.play(sounds2[10], 1, 1, 1, 0, 1f);
-                    break;
-                }
-                case R.id.button_main_Gsh: {
-                    soundPool.play(sounds2[11], 1, 1, 1, 0, 1f);
-                    break;
+            else {
+                int songId2 = noteMap2.get(view.getId());
+                if (songId2 != 0) {
+                    soundPool.play(songId2, 1, 1, 1, 0, 1f);
                 }
             }
+
         }
     }
 }

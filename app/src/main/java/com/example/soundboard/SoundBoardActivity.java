@@ -16,13 +16,14 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
 
 
     private Button ButtonA, ButtonB, ButtonBfl, ButtonC, ButtonCsh, ButtonD, ButtonDsh, ButtonE, ButtonF, ButtonFSh, ButtonG, ButtonGsh, ButtonchangeOctave;
-    private Button buttonScale1, Song1;
-    public boolean octave;
+    private Button buttonScale1, buttonSong1;
+    public boolean octave, mode;
     private SoundPool soundPool;
     private int soundID;
     boolean loaded = false;
-    private int[] sounds1, sounds2;
+    private int[] sounds1, sounds2, record;
     private Map<Integer, Integer> noteMap, noteMap2;
+    private int counter;
 
 
     @Override
@@ -55,7 +56,7 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         ButtonGsh = findViewById(R.id.button_main_Gsh);
         ButtonchangeOctave = findViewById(R.id.button_main_changeOctave);
         buttonScale1 = findViewById(R.id.button_main_scale1);
-        Song1 = findViewById(R.id.button_main_scale2);
+        buttonSong1 = findViewById(R.id.button_main_scale2);
 
 
     }
@@ -74,6 +75,13 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
             public void onClick(View view) {
 
                 playScale1();
+            }
+        });
+        buttonSong1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                playArray(record);
             }
         });
 
@@ -157,6 +165,7 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         sounds1[9] = soundPool.load(this, R.raw.scalefs, 1);
         sounds1[10] = soundPool.load(this, R.raw.scaleg, 1);
         sounds1[11] = soundPool.load(this, R.raw.scalegs, 1);
+
         sounds2 = new int[12];
         sounds2[0] = soundPool.load(this, R.raw.scalehigha, 1);
         sounds2[1] = soundPool.load(this, R.raw.scalehighb, 1);
@@ -170,6 +179,8 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         sounds2[9] = soundPool.load(this, R.raw.scalehighfs, 1);
         sounds2[10] = soundPool.load(this, R.raw.scalehighg, 1);
         sounds2[11] = soundPool.load(this, R.raw.scalehighgs, 1);
+
+        record = new int[10000];
     }
 
     public void playNote(int arrayNum,int note)
@@ -201,6 +212,15 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         playNote(2,3);
     }
 
+    public void playArray(int[] array)
+    {
+        for (int x = 0; x < counter; x++)
+        {
+            soundPool.play(array[x], 1, 1, 1, 0, 1f);
+            delay(500);
+        }
+    }
+
     @Override
     public void onClick(View view) {
     }
@@ -215,13 +235,24 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
                 int songId = noteMap.get(view.getId());
                 if (songId != 0) {
                     soundPool.play(songId, 1, 1, 1, 0, 1f);
+                    if (mode == false)
+                    {
+                        record[counter] = songId;
+                        counter++;
+                    }
                 }
             } else {
                 int songId2 = noteMap2.get(view.getId());
                 if (songId2 != 0) {
                     soundPool.play(songId2, 1, 1, 1, 0, 1f);
+                    if (mode == false)
+                    {
+                        record[counter] = songId2;
+                        counter++;
+                    }
                 }
             }
+
 
         }
     }
